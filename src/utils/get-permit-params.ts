@@ -62,11 +62,9 @@ export async function getPermitParams(
 }
 
 async function signTypedData(signer: any) {
-  if (signer["_signTypedData"]) {
+  try {
     return signer._signTypedData;
-  } else if (signer["signTypedData"]) {
+  } catch (error) {
     return signer.signTypedData;
-  } else {
-    throw new Error("Not an instance of ethers.Wallet");
   }
 }
