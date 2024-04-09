@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { TypedDataDomain, ethers } from "ethers";
 
 /**
  * Simplified way to get the parameters required to execute a `permit` operation in an ERC20 compliant token
@@ -47,24 +47,15 @@ export async function getPermitParams(
     ],
   };
 
-  const domain = {
+  const domain: TypedDataDomain = {
     name: await erc20Permit.name(),
     version,
     chainId,
-    verifyingContract: erc20Permit.address,
+    verifyingContract: erc20Permit.address as unknown as string,
   };
 
-  const signTypeData = await signTypedData(signer);
-  const signature = signTypeData(domain, types, values);
-  const { r, v, s } = ethers.utils.splitSignature(signature);
+  const signature = await signer.signTypedData(domain, types, values);
+  const { r, v, s } = ethers.Signature.from(signature);
 
   return { owner, spender, value, deadline, v, r, s };
-}
-
-async function signTypedData(signer: any) {
-  try {
-    return signer._signTypedData;
-  } catch (error) {
-    return signer.signTypedData;
-  }
 }

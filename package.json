@@ -1,6 +1,6 @@
 {
   "name": "erc20-utils",
-  "version": "0.0.32",
+  "version": "0.0.4",
   "description": "Collections of utilies for ERC20 (with extensions) compliant smart contracts.",
   "main": "index.ts",
   "scripts": {
@@ -19,7 +19,7 @@
   "author": "github.com/Cocodrilette",
   "license": "MIT",
   "dependencies": {
-    "ethers": "5.7.2",
+    "ethers": "6.11.1",
     "typescript": "5.4.4"
   },
   "files": [
