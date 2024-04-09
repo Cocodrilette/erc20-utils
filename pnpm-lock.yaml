@@ -8,6 +8,9 @@ dependencies:
   ethers:
     specifier: 5.7.2
     version: 5.7.2
+  typescript:
+    specifier: ^5.4.4
+    version: 5.4.4
 
 packages:
 
@@ -429,6 +432,12 @@ packages:
 
   /scrypt-js@3.0.1:
     resolution: {integrity: sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==}
+    dev: false
+
+  /typescript@5.4.4:
+    resolution: {integrity: sha512-dGE2Vv8cpVvw28v8HCPqyb08EzbBURxDpuhJvTrusShUfGnhHBafDsLdS1EhhxyL6BJQE+2cT3dDPAv+MQ6oLw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
     dev: false
 
   /ws@7.4.6:
