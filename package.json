@@ -1,0 +1,23 @@
+{
+  "name": "erc20-utils",
+  "version": "0.0.1",
+  "description": "Collections of utilies for ERC20 (with extensions) compliant smart contracts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Smart Contracts",
+    "EVM",
+    "Ethereum",
+    "ethers",
+    "ERC20",
+    "permit",
+    "blockchain"
+  ],
+  "author": "github.com/Cocodrilette",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "5.7.2"
+  }
+}
