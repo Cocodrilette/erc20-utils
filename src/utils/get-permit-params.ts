@@ -54,8 +54,19 @@ export async function getPermitParams(
     verifyingContract: erc20Permit.address,
   };
 
-  const signature = await signer._signTypedData(domain, types, values);
+  const signTypeData = await signTypedData(signer);
+  const signature = signTypeData(domain, types, values);
   const { r, v, s } = ethers.utils.splitSignature(signature);
 
   return { owner, spender, value, deadline, v, r, s };
+}
+
+async function signTypedData(signer: any) {
+  if (signer["_signTypedData"]) {
+    return signer._signTypedData;
+  } else if (signer["signTypedData"]) {
+    return signer.signTypedData;
+  } else {
+    throw new Error("Not an instance of ethers.Wallet");
+  }
 }
