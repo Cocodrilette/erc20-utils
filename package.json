@@ -1,6 +1,6 @@
 {
   "name": "erc20-utils",
-  "version": "0.0.4",
+  "version": "0.0.41",
   "description": "Collections of utilies for ERC20 (with extensions) compliant smart contracts.",
   "main": "index.ts",
   "scripts": {
