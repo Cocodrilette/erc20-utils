@@ -1,6 +1,6 @@
 {
   "name": "erc20-utils",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "Collections of utilies for ERC20 (with extensions) compliant smart contracts.",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,12 @@
     "blockchain"
   ],
   "author": "github.com/Cocodrilette",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ethers": "5.7.2"
+  },
+  "publishConfig": {
+    "main": "index.js",
+    "typings": "index.d.ts"
   }
 }
