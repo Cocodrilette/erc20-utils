@@ -1,4 +1,5 @@
-import { TypedDataDomain, ethers } from "ethers";
+import { ethers } from "ethers";
+import { ERC20 } from "../blockchain/typechain-types";
 
 /**
  * Simplified way to get the parameters required to execute a `permit` operation in an ERC20 compliant token
@@ -10,12 +11,12 @@ import { TypedDataDomain, ethers } from "ethers";
 export async function getPermitParams(
   signer: ethers.Wallet,
   erc20Permit: ethers.Contract,
-  {
-    value,
-    spender,
-    chainId,
-    version = "1",
-  }: { value: string; spender: string; chainId: number; version?: string }
+  params: {
+    value: string;
+    spender: string;
+    chainId?: number;
+    deadline?: number;
+  }
 ): Promise<{
   owner: string;
   spender: string;
@@ -28,13 +29,14 @@ export async function getPermitParams(
   const owner = signer.address;
 
   const nonce = await erc20Permit.nonces(owner);
-  const deadline = Date.now() + 1000 * (60 * 60); // 1h
-  const values = {
-    owner,
-    spender,
-    value,
-    nonce,
-    deadline,
+  const deadline = params.deadline || Date.now() + 3600; // 1h
+  const { spender, value, chainId } = params;
+
+  const domain = {
+    name: await getTokenName(erc20Permit),
+    version: "1",
+    chainId: await getChainId(erc20Permit, chainId),
+    verifyingContract: await getTokenAddress(erc20Permit),
   };
 
   const types = {
@@ -47,15 +49,48 @@ export async function getPermitParams(
     ],
   };
 
-  const domain: TypedDataDomain = {
-    name: await erc20Permit.name(),
-    version,
-    chainId,
-    verifyingContract: erc20Permit.address as unknown as string,
+  const values = {
+    owner,
+    spender,
+    value,
+    nonce,
+    deadline,
   };
 
   const signature = await signer.signTypedData(domain, types, values);
+  const recovered = ethers.verifyTypedData(domain, types, values, signature);
+
+  if (recovered !== signer.address)
+    throw new Error("The signature is invalid. The permit will fail.");
+
   const { r, v, s } = ethers.Signature.from(signature);
 
-  return { owner, spender, value, deadline, v, r, s };
+  return {
+    owner,
+    spender,
+    value,
+    deadline,
+    v,
+    r,
+    s,
+  };
+}
+
+async function getTokenName(token: ERC20 | ethers.Contract) {
+  return token.name();
+}
+
+async function getTokenAddress(token: ERC20 | ethers.Contract) {
+  return token.getAddress();
+}
+
+async function getChainId(token: ethers.Contract, chainId: number | undefined) {
+  if (chainId) return chainId;
+
+  const network = await token.runner?.provider?.getNetwork();
+  if (network) return parseInt(network.chainId.toString());
+
+  throw new Error(
+    "chainId was not provided and cannot be fetch from the token network"
+  );
 }
