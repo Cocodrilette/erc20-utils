@@ -4,7 +4,8 @@
   "description": "Collections of utilies for ERC20 (with extensions) compliant smart contracts.",
   "main": "index.ts",
   "scripts": {
-    "build": "pnpm exec tsc"
+    "build": "pnpm exec tsc",
+    "publish-pipe": "pnpm exec tsc && pnpm build && pnpm publish"
   },
   "keywords": [
     "Smart Contracts",
