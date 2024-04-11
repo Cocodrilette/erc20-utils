@@ -14,12 +14,14 @@ export async function getPermitParams(
   params: {
     value: string;
     spender: string;
+    destination: string;
     chainId?: number;
     deadline?: number;
   }
 ): Promise<{
   owner: string;
   spender: string;
+  destination: string;
   value: string;
   deadline: number;
   v: number;
@@ -30,7 +32,7 @@ export async function getPermitParams(
 
   const nonce = await erc20Permit.nonces(owner);
   const deadline = params.deadline || Date.now() + 3600; // 1h
-  const { spender, value, chainId } = params;
+  const { spender, value, chainId, destination } = params;
 
   const domain = {
     name: await getTokenName(erc20Permit),
@@ -68,6 +70,7 @@ export async function getPermitParams(
   return {
     owner,
     spender,
+    destination,
     value,
     deadline,
     v,
