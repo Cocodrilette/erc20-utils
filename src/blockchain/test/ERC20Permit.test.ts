@@ -29,6 +29,7 @@ describe("ERC20Permit", function () {
             value: sentValue,
             chainId: network.config.chainId as number,
             spender: user1.address,
+            destination: user1.address,
           }
         );
 
